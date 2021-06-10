@@ -1,32 +1,48 @@
-// create a function onSave to find the right parent row and input
+// create a function onSave to find the right parent row, input, etc
 
 function onSave(event) {
   var pressedButton = event.target;
   var parentRow = pressedButton.parentNode;
-  var textArea = parentRow.querySelector("input");
-  // console.log(textArea.value);
+  var textArea = parentRow.querySelector("input"); //finding the element
+  var rowValue = textArea.value; //taking the value of an element and assign it to a var
+  var hour = parentRow.firstChild.textContent; //assign textcontent of the first child to that var
+  window.localStorage.setItem(hour, rowValue);
 }
 
 //load html. css
 $(document).ready(function () {
   var container = document.querySelector(".container");
 
+  var currentTime = new Date();
+  var currentHour = currentTime.getHours();
+
   var startHour = 9;
   for (let i = 0; i < 9; i++) {
-    var time = new Date();
-    time.setHours(startHour + i);
-    time.setMinutes(0);
+    var date = new Date();
+    date.setHours(startHour + i);
+    date.setMinutes(0);
+    var rowHour = date.getHours();
+    var rowTime = moment(date).format("hh:mm a");
 
     var row = document.createElement("div");
     row.className = "row";
 
-    var hour = document.createElement("div");
-    hour.className = "col-sm-2";
-    hour.textContent = moment(time).format("hh:mm a");
-    row.appendChild(hour);
+    if (rowHour < currentHour) {
+      row.classList.add("past");
+    } else if (rowHour == currentHour) {
+      row.classList.add("present");
+    } else {
+      row.classList.add("future");
+    }
+
+    var timeColumn = document.createElement("div");
+    timeColumn.className = "col-sm-2";
+    timeColumn.textContent = rowTime;
+    row.appendChild(timeColumn);
 
     var textArea = document.createElement("input");
     textArea.className = "col-sm-8";
+    textArea.value = window.localStorage.getItem(rowTime);
     row.appendChild(textArea);
 
     var saveButton = document.createElement("button");
@@ -41,17 +57,5 @@ $(document).ready(function () {
 
 //set current date
 var currentDate = moment().format("MMMM Do YYYY");
-var hour = [9, 10, 11, 12, 1, 2, 3, 4, 5];
 
 $("#currentDay").text("Today's Date: " + currentDate);
-
-//save button
-$(".btn").on("click", function () {});
-
-for (let i = 0; i < hour.length; i++) {
-  var taskrow = "row-9";
-  var task = $("");
-}
-
-// set local storage data
-var hour9 = JSON.parse(localStorage.getItem("hour-9"));
