@@ -13,16 +13,17 @@ function onSave(event) {
 $(document).ready(function () {
   var container = document.querySelector(".container");
 
-  var currentTime = new Date();
+  var currentTime = new Date(); //google Date
   var currentHour = currentTime.getHours();
 
+  //create loops for hours
   var startHour = 9;
   for (let i = 0; i < 9; i++) {
     var date = new Date();
     date.setHours(startHour + i);
-    date.setMinutes(0);
+    date.setMinutes(0); //simplify the scheduler, only hour no mins
     var rowHour = date.getHours();
-    var rowTime = moment(date).format("hh:mm a");
+    var rowTime = moment(date).format("hha");
 
     var row = document.createElement("div");
     row.className = "row";
@@ -36,17 +37,17 @@ $(document).ready(function () {
     }
 
     var timeColumn = document.createElement("div");
-    timeColumn.className = "col-sm-2";
+    timeColumn.className = "col-sm-1";
     timeColumn.textContent = rowTime;
     row.appendChild(timeColumn);
 
     var textArea = document.createElement("input");
-    textArea.className = "col-sm-8";
+    textArea.className = "col-sm-10";
     textArea.value = window.localStorage.getItem(rowTime);
     row.appendChild(textArea);
 
     var saveButton = document.createElement("button");
-    saveButton.className = "col-sm-2 btn";
+    saveButton.className = "btn";
     saveButton.textContent = "Save";
     saveButton.addEventListener("click", onSave);
     row.appendChild(saveButton);
